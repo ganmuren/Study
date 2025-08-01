@@ -1,5 +1,7 @@
 package com.weiyi.study;
 
+import lombok.val;
+
 import java.util.*;
 
 public class Hello {
@@ -420,18 +422,76 @@ public class Hello {
                 l = mid + 1;
             }
         }
-        if(nums[l]==target)return l;
+        if (nums[l] == target) return l;
         return -1;
     }
+
     //206. reverse-linked-list
     public static ListNode reverseList(ListNode head) {
-        ListNode pre=null,cur=head;
-        while (cur!=null){
-            ListNode nxt=cur.next;
-            cur.next=pre;
-            pre=cur;
-            cur=nxt;
+        ListNode pre = null, cur = head;
+        while (cur != null) {
+            ListNode nxt = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = nxt;
         }
         return pre;
+    }
+
+    public MyListNode reverseList1(ListNode head, int len) {
+        ListNode pre = null, cur = head, tailNxt = null;
+        while (cur != null && len != 0) {
+            tailNxt = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = tailNxt;
+            len--;
+        }
+        return new MyListNode(pre, tailNxt);
+    }
+
+    //92. reverse-linked-list-ii
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        int pos = 1;
+        ListNode cur = head, pre = null, ans = head;
+        while (pos <= right && cur != null) {
+            if (pos == left) {
+                MyListNode myList = reverseList1(cur, right - left + 1);
+                if (pre == null) ans = myList.head;
+                else pre.next = myList.head;
+                cur.next = myList.tailNext;
+                break;//got answer.
+            } else {
+                pre = cur;
+                cur = cur.next;
+                pos++;
+
+            }
+        }
+        return ans;
+    }
+
+    //25. reverse-nodes-in-k-group
+    public ListNode reverseKGroup(ListNode head, int k) {
+        int len = 0;
+        ListNode cur = head;
+        while (cur != null) {
+            len++;
+            cur = cur.next;
+        }
+        int pos = 1;
+        cur = head;
+        ListNode pre = null, ans = head;
+        while (pos + k - 1 <= len && cur != null) {
+            MyListNode myList = reverseList1(cur, k);
+            if (pre == null) ans = myList.head;
+            else pre.next = myList.head;
+            cur.next = myList.tailNext;
+            //got answer
+            pre = cur;
+            cur = cur.next;
+            pos += k ;
+        }
+        return ans;
     }
 }
