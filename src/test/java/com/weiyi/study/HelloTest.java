@@ -35,4 +35,12 @@ public class HelloTest {
         System.out.println(k);
 
     }
+    @Test
+    public void ListNodeTest(){
+        int[] arr1 = {1,2,3,4,5};
+        var head = ListNode.create(arr1);
+        ListNode.show(head);
+        head=Hello.reverseList(head);
+        ListNode.show(head);
+    }
 }
