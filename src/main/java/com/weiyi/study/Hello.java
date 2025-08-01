@@ -160,13 +160,13 @@ public class Hello {
         Arrays.sort(nums);
         int i = 0;
         while (i < (nums.length - 2)) {
-            if(nums[i]+nums[i+1]+nums[i+2]>0)break;
+            if (nums[i] + nums[i + 1] + nums[i + 2] > 0) break;
             int a = nums[i];
             int p = i + 1;
             int q = nums.length - 1;
             while (p < q) {
-                int a2= a+nums[p];
-                if(a2>0) break;
+                int a2 = a + nums[p];
+                if (a2 > 0) break;
                 int b = a2 + nums[q];
                 if (b == 0) {
                     result.add(List.of(a, nums[p], nums[q]));
@@ -195,88 +195,94 @@ public class Hello {
         }
         return new int[0];
     }
+
     public int[] twoSum2(int[] numbers, int target) {
         //numbers are sorted.
-        int i=0, j=numbers.length-1;
-        while (i<j){
-            int v = numbers[i]+numbers[j];
-            if(v==target) return new int[]{i+1,j+1};
-            if(v>target)j--;
+        int i = 0, j = numbers.length - 1;
+        while (i < j) {
+            int v = numbers[i] + numbers[j];
+            if (v == target) return new int[]{i + 1, j + 1};
+            if (v > target) j--;
             else i++;
         }
         return new int[0];
     }
+
     public int maxArea(int[] height) {
-        int max=0, i=0, j=height.length-1;
-        while (i<j){
-            int area=Math.min(height[i],height[j])*(j-i);
-            if(area>max)max=area;
-            if(height[i]<height[j])i++;
+        int max = 0, i = 0, j = height.length - 1;
+        while (i < j) {
+            int area = Math.min(height[i], height[j]) * (j - i);
+            if (area > max) max = area;
+            if (height[i] < height[j]) i++;
             else j--;
         }
         return max;
     }
+
     //42. trapping-rain-water
     public static int trap(int[] height) {
-        int len = height.length, max=0;
-        int[] pre=new int[len], suf=new int[len];
-        pre[0]=0;
-        for (int i=1;i<len;i++){
-            pre[i]=Math.max(height[i-1],pre[i-1]);//pre[i-1] is max height
+        int len = height.length, max = 0;
+        int[] pre = new int[len], suf = new int[len];
+        pre[0] = 0;
+        for (int i = 1; i < len; i++) {
+            pre[i] = Math.max(height[i - 1], pre[i - 1]);//pre[i-1] is max height
         }
         Utils.showArrayItems(pre);
-        suf[len-1]=0;
-        for (int j=len-2;j>=0;j--){
-            suf[j]=Math.max(height[j+1],suf[j+1]);//suf[j+1] is max height.
+        suf[len - 1] = 0;
+        for (int j = len - 2; j >= 0; j--) {
+            suf[j] = Math.max(height[j + 1], suf[j + 1]);//suf[j+1] is max height.
         }
         Utils.showArrayItems(suf);
-        for (int i=1;i<len-1;i++){
-            int h = Math.min(pre[i],suf[i]);
-            int h1 = Math.max(h-height[i],0);
+        for (int i = 1; i < len - 1; i++) {
+            int h = Math.min(pre[i], suf[i]);
+            int h1 = Math.max(h - height[i], 0);
             max += h1;
         }
         return max;
     }
+
     //42. trapping-rain-water
     public static int trap2(int[] height) {
-        int len = height.length, max=0;
-        int i=1,j=len-2,left=0,right=0;
-        while (i<=j){
-            left=Math.max(height[i-1],left);
-            right=Math.max(height[j+1],right);
-            int water =0;
-            if(left<right){
-                water=Math.max(left-height[i],0);
+        int len = height.length, max = 0;
+        int i = 1, j = len - 2, left = 0, right = 0;
+        while (i <= j) {
+            left = Math.max(height[i - 1], left);
+            right = Math.max(height[j + 1], right);
+            int water = 0;
+            if (left < right) {
+                water = Math.max(left - height[i], 0);
                 i++;
-            }else {
-                water=Math.max(right-height[j],0);
+            } else {
+                water = Math.max(right - height[j], 0);
                 j--;
             }
-            max+=water;
+            max += water;
         }
 
 
         return max;
     }
-     int sum(int[] nums,int i, int j){
-        int sum=0;
-        for(int k=i;k<=j;k++){
-            sum+=nums[k];
+
+    int sum(int[] nums, int i, int j) {
+        int sum = 0;
+        for (int k = i; k <= j; k++) {
+            sum += nums[k];
         }
         return sum;
     }
+
     //209. minimum-size-subarray-sum
     public int minSubArrayLen(int target, int[] nums) {
         int i = 0, j = 0, sum = nums[0], minLen = 0;
         while (i <= j && j < nums.length) {
             int len = j - i + 1;
-            if(minLen!=0 && len>=minLen){
+            if (minLen != 0 && len >= minLen) {
                 sum -= nums[i];
                 i++;
                 continue;
             }
             if (sum >= target) {
-                if(len==1) return len;
+                if (len == 1) return len;
                 if (minLen == 0)
                     minLen = len;
                 else
@@ -291,22 +297,23 @@ public class Hello {
         }
         return minLen;
     }
+
     public int minSubArrayLen2(int target, int[] nums) {
         int left = 0;
         int sum = 0;
         int ans = nums.length + 1;
-        for(int right = 0; right < nums.length; right++){
+        for (int right = 0; right < nums.length; right++) {
             sum += nums[right];
-            while (sum >= target && left<=right){
-                int len=  right - left + 1;
-                if(len==1)return len;
+            while (sum >= target && left <= right) {
+                int len = right - left + 1;
+                if (len == 1) return len;
                 ans = Math.min(ans, len);
                 sum -= nums[left];
                 left++;
             }
         }
 
-        if(ans != nums.length + 1) {
+        if (ans != nums.length + 1) {
             return ans;
         }
         return 0;
@@ -314,38 +321,106 @@ public class Hello {
 
     //713. subarray-product-less-than-k
     public int numSubarrayProductLessThanK(int[] nums, int k) {
-        int multi=1,l=0,ans=0;
-        for(int r=0;r<nums.length;r++){
-            multi*=nums[r];
-            while (multi>=k&&l<=r){
-                multi=multi/nums[l];
+        int multi = 1, l = 0, ans = 0;
+        for (int r = 0; r < nums.length; r++) {
+            multi *= nums[r];
+            while (multi >= k && l <= r) {
+                multi = multi / nums[l];
                 l++;
             }
-            if(l<=r)ans+=(r-l+1);
+            if (l <= r) ans += (r - l + 1);
         }
         return ans;
     }
-    private Map<Character,Integer> initMap(char[] s){
-        Map<Character,Integer> cnt= new HashMap<>();
+
+    private Map<Character, Integer> initMap(char[] s) {
+        Map<Character, Integer> cnt = new HashMap<>();
         for (char c : s) {
             cnt.put(c, 0);
         }
         return cnt;
     }
+
     //3. longest-substring-without-repeating-characters
     public int lengthOfLongestSubstring(String s) {
-        int ans=0, l=0;
-        Map<Character,Integer> cnt= initMap(s.toCharArray());
-        for (int r=0;r<s.length();r++){
+        int ans = 0, l = 0;
+        Map<Character, Integer> cnt = initMap(s.toCharArray());
+        for (int r = 0; r < s.length(); r++) {
             char c = s.charAt(r);
-            cnt.put(c,cnt.get(c)+1);
-            while (cnt.get(c)>1&&l<=r){
+            cnt.put(c, cnt.get(c) + 1);
+            while (cnt.get(c) > 1 && l <= r) {
                 char c1 = s.charAt(l);
-                cnt.put(c1,cnt.get(c1)-1);//left c count minus 1.
+                cnt.put(c1, cnt.get(c1) - 1);//left c count minus 1.
                 l++;
             }
-            if(l<=r)ans=Math.max(r-l+1,ans);
+            if (l <= r) ans = Math.max(r - l + 1, ans);
         }
         return ans;
+    }
+
+    //34. find-first-and-last-position-of-element-in-sorted-array
+    public int[] searchRange(int[] nums, int target) {
+        int l = 0, r = nums.length - 1;
+        int[] ans = {-1, -1};
+        while (l <= r) {
+            int mid = (l + r) / 2;
+            int v = nums[mid];
+            if (v >= target) r = mid - 1;// num in r's right is bigger equal than target.
+            else l = mid + 1;
+        }
+        if (r == nums.length - 1 || nums[l] != target) return ans;//if r not move, then all data smaller than target.
+        ans[0] = l;
+
+        r = nums.length - 1;//reuse last left index.
+        while (l <= r) {
+            int mid = (l + r) / 2;
+            int v = nums[mid];
+            if (v <= target) l = mid + 1;// num in l's left is smaller equal than target.
+            else r = mid - 1;
+        }
+        ans[1] = r;
+        return ans;
+    }
+
+    //162. find-peak-element
+    public int findPeakElement(int[] nums) {
+        int l = 0, r = nums.length - 1;
+        while (l < r) {
+            int mid = (l + r) / 2;
+            if (nums[mid] < nums[mid + 1]) l = mid + 1;
+            else r = mid;
+        }
+        return l;
+    }
+
+    //153. find-minimum-in-rotated-sorted-array
+    public int findMin(int[] nums) {
+        int l = 0, r = nums.length - 1;
+        while (l < r) {
+            int pivot = nums[r];
+            int mid = (l + r) / 2;
+            if (nums[mid] > pivot) l = mid + 1;
+            else r = mid;
+        }
+        return nums[l];
+    }
+
+    //33. search-in-rotated-sorted-array
+    public int search(int[] nums, int target) {
+        int l = 0, r = nums.length - 1, v1 = nums[0];
+        while (l < r) {
+            int mid = (l + r) / 2;
+            int v_mid = nums[mid];
+            if ((target >= v1 && v_mid >= v1) || (target < v1 && v_mid < v1)) {
+                if (v_mid < target) l = mid + 1;
+                else r = mid;
+            } else if (target >= v1) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        if(nums[l]==target)return l;
+        return -1;
     }
 }
