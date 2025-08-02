@@ -490,8 +490,128 @@ public class Hello {
             //got answer
             pre = cur;
             cur = cur.next;
-            pos += k ;
+            pos += k;
         }
         return ans;
+    }
+
+    //876. middle-of-the-linked-list
+    public ListNode middleNode(ListNode head) {
+        ListNode cur1=head,cur2=head;
+        while (cur2!=null&&cur2.next!=null){
+            cur2=cur2.next.next;
+            cur1=cur1.next;
+        }
+        return cur1;
+    }
+
+    //141. linked-list-cycle
+    public boolean hasCycle(ListNode head) {
+        if(head==null)return false;
+        ListNode cur1 = head, cur2 = head.next;
+        while (cur2 != null) {
+            if(cur2==cur1)return true;
+            cur2 = cur2.next;
+            if (cur2 == null) break;
+            cur2 = cur2.next;
+            cur1 = cur1.next;
+
+        }
+        return false;
+    }
+
+    public ListNode meetNode(ListNode head) {
+        ListNode cur1 = head, cur2 = head;
+        while (cur2 != null && cur2.next!=null) {
+            cur2 = cur2.next.next;
+            cur1 = cur1.next;
+            if(cur1==cur2)return cur1;
+        }
+        return null;
+    }
+    //142. linked-list-cycle-ii
+    public ListNode detectCycle(ListNode head) {
+        ListNode meet = meetNode(head);
+        if (meet==null)return null;
+        ListNode cur1=head, cur2=meet;
+        while (true){
+            if(cur1==cur2)return cur1;
+            cur1=cur1.next;
+            cur2=cur2.next;
+        }
+
+    }
+    //143. reorder-list
+    public void reorderList(ListNode head) {
+        ListNode middle = middleNode(head);
+        ListNode head2 = reverseList(middle);
+        ListNode cur1=head, cur2=head2;
+        while (cur1!=null&&cur2!=null&&cur2.next!=null){
+            ListNode nxt1=cur1.next, nxt2=cur2.next;
+            cur1.next=cur2;
+            cur2.next=nxt1;
+            //
+            cur1=nxt1;
+            cur2=nxt2;
+        }
+    }
+    //237. delete-node-in-a-linked-list
+    public void deleteNode(ListNode node) {
+        node.val = node.next.val;
+        node.next = node.next.next;
+    }
+    //19. remove-nth-node-from-end-of-list
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode dummy=new ListNode(0,head);
+        ListNode left=dummy, right=dummy;
+        int step =0;
+        while (step<n){ // move right n step
+            right=right.next;
+            step++;
+        }
+
+        while (right.next!=null){ // move left & right together till right to end.
+            right=right.next;
+            left=left.next;
+        }
+        //delete left+1.
+        if(left==dummy)return head.next;
+        left.next=left.next.next;
+        return head;
+    }
+    //83. remove-duplicates-from-sorted-list
+    public ListNode deleteDuplicates(ListNode head) {
+        if(head==null)return head;
+        ListNode cur = head, nxt=head.next;
+        while (nxt!=null){
+            if(nxt.val!=cur.val){
+                cur.next=nxt;
+                cur=nxt;
+            }
+            nxt=nxt.next;
+        }
+        cur.next=nxt;
+        return head;
+    }
+    //82. remove-duplicates-from-sorted-list-ii
+    public ListNode deleteDuplicatesII(ListNode head) {
+        ListNode dummy = new ListNode(-101,head);
+        ListNode cur = dummy;
+        while (cur.next != null && cur.next.next != null){
+            if(cur.next.val==cur.next.next.val){
+                cur.next= findNextNoDupNode(cur.next);//change current's next.
+            }else cur=cur.next;//change current.
+
+        }
+        return dummy.next;
+    }
+    public ListNode findNextNoDupNode(ListNode node){
+        int v=node.val;
+        while (node!=null){
+            if(node.val!=v)break;
+            node=node.next;
+        }
+
+        return node;
     }
 }
