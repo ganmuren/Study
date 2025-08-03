@@ -1,7 +1,5 @@
 package com.weiyi.study;
 
-import lombok.val;
-
 import java.util.*;
 
 public class Hello {
@@ -613,5 +611,106 @@ public class Hello {
         }
 
         return node;
+    }
+    //104. maximum-depth-of-binary-tree
+    public int maxDepth(TreeNode root) {
+        if(root==null)return 0;
+        int left = maxDepth(root.left);
+        int right =maxDepth(root.right);
+        return 1+Math.max(left,right);
+    }
+    //100. same-tree
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if(p==null&&q==null)return true;
+        if(p==null||q==null)return false;
+        if(p.val!=q.val)return false;
+        //when reach here, mean p.val = q.val. check child tree.
+        return isSameTree(p.left,q.left)&& isSameTree(p.right,q.right);
+
+    }
+    //101. symmetric-tree
+    public boolean isSymmetric(TreeNode root) {
+        if(root==null)return true;
+        return isSymmetric(root.left,root.right);
+    }
+    public boolean isSymmetric(TreeNode p, TreeNode q) {
+        if(p==null&&q==null)return true;
+        if(p==null||q==null)return false;
+        if(p.val!=q.val)return false;
+        //when reach here, mean p.val = q.val. check child tree.
+        return isSymmetric(p.left,q.right)&& isSymmetric(p.right,q.left);
+
+    }
+    //110. balanced-binary-tree
+    public boolean isBalanced(TreeNode root) {
+        int height = treeHeight(root);
+        return height!=-1;
+    }
+    public int treeHeight(TreeNode root){
+        if(root==null)return 0;
+        int left = treeHeight(root.left);
+        if(left==-1)return -1;//if subtree is no balanced tree, then whole tree in no balanced tree.
+        int right =treeHeight(root.right);
+        if(right==-1)return -1;
+        if(Math.abs(left-right)>1)return -1;//return -1 means no balanced tree.
+        return 1+Math.max(left,right); // return real height means balanced tree.
+    }
+    //199. binary-tree-right-side-view
+    public List<Integer> rightSideView(TreeNode root) {
+        List<Integer> ans = new ArrayList<>();
+        walkRight(root,0,ans);
+        return ans;
+    }
+
+    public void walkRight(TreeNode root, int height, List<Integer> ans){
+        if(root==null)return ;
+        height++;
+        if(height>ans.size())ans.add(root.val);
+        walkRight(root.right,height,ans);
+        walkRight(root.left,height,ans);
+    }
+    //98. validate-binary-search-tree
+    public boolean isValidBST(TreeNode root) {
+        return InorderTraversal(root,new long[] {(long)Integer.MIN_VALUE-1});
+    }
+    public boolean InorderTraversal(TreeNode node, long[] pivot){
+        if(node==null)return true;
+        if(!InorderTraversal(node.left,pivot))return false;
+        if(node.val<=pivot[0])return false;
+        pivot[0]=node.val;
+        if(!InorderTraversal(node.right,pivot))return false;
+        return true;
+    }
+    // use pre-order traversal
+    public boolean isValidBST_1(TreeNode root) {
+
+        return preOrderTraversal(root,(long)Integer.MIN_VALUE-1, (long) Integer.MAX_VALUE+1);
+    }
+    public boolean preOrderTraversal(TreeNode node, long left, long right){
+        if(node==null) return true;
+        boolean ans = left<node.val && node.val < right;
+        ans = ans && preOrderTraversal(node.left,left, node.val);
+        ans = ans && preOrderTraversal(node.right, node.val,right);
+        return ans;
+    }
+    //236. lowest-common-ancestor-of-a-binary-tree
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(root==null)return null;
+        if(root==p || root== q) return root;
+        TreeNode left=lowestCommonAncestor(root.left,p,q);
+        TreeNode right=lowestCommonAncestor(root.right,p,q);
+        if(left!=null&&right!=null)return root;
+        if(left!=null)return left;
+        return right;
+    }
+    //235. lowest-common-ancestor-of-a-binary-search-tree
+    public TreeNode lowestCommonAncestor_1(TreeNode root, TreeNode p, TreeNode q) {
+        int v = root.val;
+        if((p.val<=v && v<=q.val) ||(q.val<=v && v<=p.val)) return root;
+        TreeNode left=null, right=null;
+        if(p.val<v) left=lowestCommonAncestor_1(root.left,p,q);
+        else right=lowestCommonAncestor_1(root.right,p,q);
+        if(left!=null)return left;
+        return right;
     }
 }
